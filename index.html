@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <!-- Esta etiqueta es vital para que se vea bien en tu tableta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mi Álbum Digital</title>
+    
+    <!-- Aquí cargamos la biblioteca que crea el efecto de pasar páginas -->
+    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+    
+    <style>
+        /* Estilos básicos para centrar el álbum en la pantalla */
+        body { 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            background: #e0e0e0; 
+            font-family: Arial, sans-serif;
+        }
+        
+        /* El contenedor del libro */
+        #book { 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+        }
+        
+        /* Estilo para las páginas interiores */
+        .page { 
+            background: #ffffff; 
+            padding: 20px; 
+            font-size: 24px; 
+            text-align: center; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            color: #333;
+            box-sizing: border-box;
+        }
+        
+        /* Estilo especial para la portada y contraportada */
+        .page-cover { 
+            background: #2c3e50; 
+            color: #ffffff; 
+            font-weight: bold;
+            font-size: 28px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Aquí es donde vive nuestro álbum. Las páginas van una tras otra -->
+    <div id="book">
+        <div class="page page-cover">Portada del Álbum</div>
+        <div class="page">Página 1 (Aquí iremos pegando las barajitas)</div>
+        <div class="page">Página 2 (Aquí iremos pegando las barajitas)</div>
+        <div class="page page-cover">Contraportada</div>
+    </div>
+
+    <script>
+        // Este es el código que activa el efecto de libro y lo adapta a tu tableta
+        const pageFlip = new St.PageFlip(document.getElementById('book'), {
+            width: 400,
+            height: 600,
+            size: "stretch",
+            minWidth: 300,
+            maxWidth: 600,
+            minHeight: 400,
+            maxHeight: 800,
+            showCover: true,
+            mobileScrollSupport: true
+        });
+        
+        // Cargamos las páginas que definimos en el HTML
+        pageFlip.loadFromHTML(document.querySelectorAll('.page'));
+    </script>
+
+</body>
+</html>
