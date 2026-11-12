@@ -2,77 +2,297 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <!-- Esta etiqueta es vital para que se vea bien en tu tableta -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mi Álbum Digital</title>
-    
-    <!-- Aquí cargamos la biblioteca que crea el efecto de pasar páginas -->
     <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
-    
     <style>
-        /* Estilos básicos para centrar el álbum en la pantalla */
-        body { 
-            margin: 0; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            background: #e0e0e0; 
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #e0e0e0;
             font-family: Arial, sans-serif;
+            overflow: hidden;
         }
-        
-        /* El contenedor del libro */
-        #book { 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
-        }
-        
-        /* Estilo para las páginas interiores */
-        .page { 
-            background: #ffffff; 
-            padding: 20px; 
-            font-size: 24px; 
-            text-align: center; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
+        #book { box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .page {
+            background: #ffffff;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             color: #333;
-            box-sizing: border-box;
         }
-        
-        /* Estilo especial para la portada y contraportada */
-        .page-cover { 
-            background: #2c3e50; 
-            color: #ffffff; 
+        .page-cover {
+            background: #2c3e50;
+            color: #ffffff;
+            justify-content: center;
             font-weight: bold;
-            font-size: 28px;
+            font-size: 26px;
         }
+        .page h3 { margin: 5px 0 12px; font-size: 16px; color: #555; }
+        /* Cuadrícula de espacios vacíos donde se pegan las barajitas */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+        .slot {
+            aspect-ratio: 3 / 4;
+            border: 2px dashed #bbb;
+            border-radius: 8px;
+            background: #fafafa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 12px;
+            overflow: hidden;
+        }
+        /* Diseño de la barajita pegada */
+        .sticker {
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            color: #fff; font-weight: bold;
+            border: 3px solid #fff; border-radius: 6px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            animation: pop 0.4s ease;
+        }
+        .sticker .num { font-size: 12px; opacity: 0.85; }
+        .sticker .emoji { font-size: 34px; margin: 4px 0; }
+        .sticker .name { font-size: 12px; text-align: center; padding: 0 4px; }
+        @keyframes pop { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* Botón flotante para abrir el sobre, dentro de la interfaz */
+        #btnSobre {
+            position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+            background: #f1c40f; color: #222; border: none;
+            padding: 12px 22px; border-radius: 30px; font-size: 16px; font-weight: bold;
+            cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 50;
+        }
+
+        /* PANTALLA DEL SOBRE (overlay con rayos azules como en tu captura) */
+        #sobreScreen {
+            position: fixed; inset: 0; z-index: 100;
+            display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            background:
+                repeating-conic-gradient(from 0deg, #00e0ff 0deg 2deg, #0088aa 2deg 4deg);
+            overflow: hidden;
+        }
+        #sobreScreen.visible { display: flex; }
+        #sobreScreen::before { /* brillo central */
+            content: ""; position: absolute; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.9), transparent 60%);
+            animation: spin 12s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .sobre-titulo {
+            position: relative; z-index: 2; color: #fff; font-weight: bold;
+            font-size: 22px; text-align: center; margin-bottom: 20px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+        }
+        .sobre-sub { position: relative; z-index: 2; color: #fff; font-size: 14px; margin-bottom: 14px; }
+
+        /* El sobre negro */
+        .envelope {
+            position: relative; z-index: 2; width: 180px; height: 240px;
+            perspective: 800px; cursor: pointer;
+        }
+        .env-body {
+            position: absolute; inset: 0; background: #111; border-radius: 8px;
+            border: 2px solid #333; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; color: #fff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+        .env-body .copa { font-size: 40px; }
+        .env-body .txt { font-size: 11px; margin-top: 6px; letter-spacing: 1px; }
+        .env-body .panini { background:#e2231a; padding:2px 8px; border-radius:3px; font-size:10px; margin-top:6px; }
+        .env-flap {
+            position: absolute; top: 0; left: 0; width: 100%; height: 50%;
+            background: #222; clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top; transition: transform 0.7s ease; z-index: 3;
+            border-radius: 8px 8px 0 0;
+        }
+        .envelope.open .env-flap { transform: rotateX(-170deg); }
+
+        /* Bandeja donde salen las barajitas del sobre */
+        #bandeja {
+            position: relative; z-index: 2; display: flex; gap: 8px;
+            margin-top: 24px; min-height: 110px; flex-wrap: wrap; justify-content: center;
+            width: 90%;
+        }
+        .card-out {
+            width: 70px; height: 95px; border-radius: 6px; color: #fff;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border: 2px solid #fff; font-size: 9px; font-weight: bold; text-align: center;
+            opacity: 0; transform: translateY(40px) rotate(0deg);
+        }
+        .card-out.show { animation: fly 0.6s forwards; }
+        @keyframes fly {
+            0% { opacity: 0; transform: translateY(40px) scale(0.5); }
+            60% { opacity: 1; transform: translateY(-15px) scale(1.1); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        #btnCerrar {
+            position: relative; z-index: 2; margin-top: 18px; background: #2c3e50;
+            color: #fff; border: none; padding: 10px 24px; border-radius: 30px;
+            font-size: 15px; cursor: pointer; display: none;
+        }
+        #btnCerrar.visible { display: block; }
     </style>
 </head>
 <body>
 
-    <!-- Aquí es donde vive nuestro álbum. Las páginas van una tras otra -->
     <div id="book">
         <div class="page page-cover">Portada del Álbum</div>
-        <div class="page">Página 1 (Aquí iremos pegando las barajitas)</div>
-        <div class="page">Página 2 (Aquí iremos pegando las barajitas)</div>
+        <div class="page">
+            <h3>Página 1</h3>
+            <div class="grid" id="grid1"></div>
+        </div>
+        <div class="page">
+            <h3>Página 2</h3>
+            <div class="grid" id="grid2"></div>
+        </div>
         <div class="page page-cover">Contraportada</div>
     </div>
 
+    <button id="btnSobre">📦 Abrir Sobre Deluxe</button>
+
+    <!-- PANTALLA DEL SOBRE -->
+    <div id="sobreScreen">
+        <div class="sobre-titulo">SOBRE DE DELUXE PACK</div>
+        <div class="sobre-sub">Toca el sobre para abrirlo</div>
+        <div class="envelope" id="envelope">
+            <div class="env-body">
+                <div class="copa">🏆</div>
+                <div class="txt">FIFA 2026</div>
+                <div class="panini">PANINI</div>
+            </div>
+            <div class="env-flap"></div>
+        </div>
+        <div id="bandeja"></div>
+        <button id="btnCerrar">Pegar en mi álbum</button>
+    </div>
+
     <script>
-        // Este es el código que activa el efecto de libro y lo adapta a tu tableta
-        const pageFlip = new St.PageFlip(document.getElementById('book'), {
-            width: 400,
-            height: 600,
-            size: "stretch",
-            minWidth: 300,
-            maxWidth: 600,
-            minHeight: 400,
-            maxHeight: 800,
-            showCover: true,
-            mobileScrollSupport: true
+        // ====== MAZO DE BARAJITAS DE PRUEBA ======
+        // Cuando tengas tus fotos reales, reemplaza el emoji por la ruta de tu imagen.
+        const deck = [
+            {id:1,  name:"Mbappé",    team:"Francia",     color:"#1e3a8a", emoji:"⚽"},
+            {id:2,  name:"Messi",     team:"Argentina",   color:"#38bdf8", emoji:"🐐"},
+            {id:3,  name:"Vinicius",  team:"Brasil",      color:"#16a34a", emoji:"🇧🇷"},
+            {id:4,  name:"Haaland",   team:"Noruega",     color:"#dc2626", emoji:"🤖"},
+            {id:5,  name:"Bellingham",team:"Inglaterra",  color:"#7f1d1d", emoji:"🦁"},
+            {id:6,  name:"Lautaro",   team:"Argentina",   color:"#0ea5e9", emoji:"🐂"},
+            {id:7,  name:"Salah",     team:"Egipto",      color:"#ca8a04", emoji:"👑"},
+            {id:8,  name:"Lewandowski",team:"Polonia",    color:"#b91c1c", emoji:"🇵🇱"},
+            {id:9,  name:"De Bruyne", team:"Bélgica",     color:"#facc15", emoji:"🎯"},
+            {id:10, name:"Neymar",    team:"Brasil",      color:"#22c55e", emoji:"🇧🇷"},
+            {id:11, name:"Modric",    team:"Croacia",     color:"#ef4444", emoji:"🧠"},
+            {id:12, name:"Pedri",     team:"España",      color:"#f97316", emoji:"🇪🇸"},
+            {id:13, name:"Ronaldo",   team:"Portugal",    color:"#15803d", emoji:"🇵🇹"},
+            {id:14, name:"Griezmann", team:"Francia",     color:"#1d4ed8", emoji:"🇫🇷"},
+            {id:15, name:"Rodrygo",   team:"Brasil",      color:"#65a30d", emoji:"🇧🇷"},
+            {id:16, name:"Saka",      team:"Inglaterra",  color:"#991b1b", emoji:"🦁"},
+            {id:17, name:"Dybala",    team:"Argentina",   color:"#0284c7", emoji:"🇦🇷"},
+            {id:18, name:"Musiala",   team:"Alemania",    color:"#a16207", emoji:"🇩🇪"},
+            {id:19, name:"Osimhen",   team:"Nigeria",     color:"#166534", emoji:"🇳🇬"},
+            {id:20, name:"Kane",      team:"Alemania",    color:"#b45309", emoji:"🇩🇪"},
+            {id:21, name:"Foden",     team:"Inglaterra",  color:"#7f1d1d", emoji:"🦁"},
+            {id:22, name:"Alvarez",   team:"Argentina",   color:"#0ea5e9", emoji:"🐐"},
+            {id:23, name:"Jamal",     team:"Alemania",    color:"#a16207", emoji:"🇩🇪"},
+            {id:24, name:"Nico",      team:"España",      color:"#ea580c", emoji:"🇪🇸"}
+        ];
+
+        // Barajitas que ya están pegadas en el álbum
+        const pastedIds = new Set();
+
+        // Crear los 12 espacios vacíos (6 por página)
+        function crearSlots() {
+            const g1 = document.getElementById('grid1');
+            const g2 = document.getElementById('grid2');
+            for (let i = 0; i < 6; i++) g1.appendChild(nuevoSlot());
+            for (let i = 0; i < 6; i++) g2.appendChild(nuevoSlot());
+        }
+        function nuevoSlot() {
+            const s = document.createElement('div');
+            s.className = 'slot';
+            s.textContent = 'espacio';
+            return s;
+        }
+
+        // Pegar una barajita en el primer espacio libre
+        function pegarBarajita(card) {
+            const slots = [...document.querySelectorAll('.slot')];
+            const libre = slots.find(s => !s.classList.contains('filled'));
+            if (!libre) return false;
+            libre.classList.add('filled');
+            libre.textContent = '';
+            const st = document.createElement('div');
+            st.className = 'sticker';
+            st.style.background = card.color;
+            st.innerHTML = `<div class="num">#${card.id}</div><div class="emoji">${card.emoji}</div><div class="name">${card.name}</div>`;
+            libre.appendChild(st);
+            pastedIds.add(card.id);
+            return true;
+        }
+
+        // Abrir la pantalla del sobre
+        document.getElementById('btnSobre').addEventListener('click', () => {
+            document.getElementById('sobreScreen').classList.add('visible');
+            document.getElementById('envelope').classList.remove('open');
+            document.getElementById('bandeja').innerHTML = '';
+            document.getElementById('btnCerrar').classList.remove('visible');
         });
-        
-        // Cargamos las páginas que definimos en el HTML
+
+        // Abrir el sobre con animación y sacar 5 barajitas
+        document.getElementById('envelope').addEventListener('click', () => {
+            const env = document.getElementById('envelope');
+            if (env.classList.contains('open')) return;
+            env.classList.add('open');
+
+            // Elegir 5 barajitas distintas que aún no estén pegadas
+            const disponibles = deck.filter(c => !pastedIds.has(c.id));
+            const picks = [];
+            while (picks.length < 5 && disponibles.length > 0) {
+                const idx = Math.floor(Math.random() * disponibles.length);
+                picks.push(disponibles.splice(idx, 1)[0]);
+            }
+
+            // Mostrarlas saliendo una por una
+            const bandeja = document.getElementById('bandeja');
+            picks.forEach((card, i) => {
+                setTimeout(() => {
+                    const el = document.createElement('div');
+                    el.className = 'card-out';
+                    el.style.background = card.color;
+                    el.innerHTML = `<div>#${card.id}</div><div style="font-size:22px">${card.emoji}</div><div>${card.name}</div>`;
+                    bandeja.appendChild(el);
+                    requestAnimationFrame(() => el.classList.add('show'));
+                }, 500 + i * 250);
+            });
+
+            // Pegarlas en el álbum y mostrar botón de cerrar
+            setTimeout(() => {
+                picks.forEach(c => pegarBarajita(c));
+                document.getElementById('btnCerrar').classList.add('visible');
+            }, 500 + picks.length * 250 + 600);
+        });
+
+        // Cerrar el sobre y volver al álbum
+        document.getElementById('btnCerrar').addEventListener('click', () => {
+            document.getElementById('sobreScreen').classList.remove('visible');
+        });
+
+        // Inicializar el libro y los espacios
+        crearSlots();
+        const pageFlip = new St.PageFlip(document.getElementById('book'), {
+            width: 400, height: 600, size: "stretch",
+            minWidth: 300, maxWidth: 600, minHeight: 400, maxHeight: 800,
+            showCover: true, mobileScrollSupport: true
+        });
         pageFlip.loadFromHTML(document.querySelectorAll('.page'));
     </script>
 
