@@ -1,5 +1,4 @@
 // ====== DETECCIÓN DE ORIENTACIÓN ======
-// Cambia el fondo según si la pantalla está acostada o de pie.
 function aplicarFondo() {
     const esHorizontal = window.matchMedia('(orientation: landscape)').matches;
     const ruta = esHorizontal ? 'img/interfaz_horizontal.jpg' : 'img/interfaz_vertical.jpg';
@@ -12,7 +11,6 @@ if (window.matchMedia('(orientation: landscape)').addEventListener) {
 }
 
 // ====== 2 SOBRES DIARIOS ======
-// Cuenta cuántos sobres le quedan al usuario hoy.
 const hoy = new Date().toDateString();
 const datos = JSON.parse(localStorage.getItem('albumDatos') || '{}');
 if (datos.ultimaFecha !== hoy) {
@@ -20,4 +18,7 @@ if (datos.ultimaFecha !== hoy) {
     datos.ultimaFecha = hoy;
     localStorage.setItem('albumDatos', JSON.stringify(datos));
 }
-document.getElementById('sobresDisponibles').textContent = datos.sobresHoy + ' sobres disponibles hoy';
+const contadorEl = document.getElementById('sobresDisponibles');
+if (contadorEl) {
+    contadorEl.textContent = datos.sobresHoy + ' sobres hoy';
+}
