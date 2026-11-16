@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mi Álbum Virtual - Inicio</title>
-    <!-- Aquí llamamos al archivo de estilos -->
+    <title>Mi Álbum Virtual 2026</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,43 +11,41 @@
     <div class="contenedor">
         <div class="titulo-principal">🏆 MI ÁLBUM VIRTUAL 2026 🏆</div>
 
-        <div class="fila-superior">
-            <a href="escanear.html" class="boton-pequeno">
+        <!-- Fila de los 5 elementos principales -->
+        <div class="fila-principal">
+            
+            <a href="escanear.html" class="elemento">
+                <div class="letrero">ESCANEAR<br>CONTENIDO</div>
                 <img src="img/escanea_qr.jpg" alt="Escanear">
-                <div class="texto">ESCANEAR</div>
             </a>
-            <a href="mis-cromos.html" class="boton-pequeno">
-                <div class="icono">🃏</div>
-                <div class="texto">MIS CROMOS</div>
+
+            <a href="mis-cromos.html" class="elemento">
+                <div class="letrero">MIS<br>CROMOS</div>
+                <img src="img/barajitas/1.jpg" alt="Mis Cromos">
             </a>
-            <a href="codigo.html" class="boton-pequeno">
-                <div class="icono">🔑</div>
-                <div class="texto">CÓDIGO</div>
+
+            <a href="mi-album.html" class="elemento central">
+                <div class="letrero">MI ÁLBUM</div>
+                <img src="img/portada.jpg" alt="Mi Álbum">
             </a>
+
+            <a href="abrir-sobres.html" class="elemento">
+                <div class="letrero">ABRIR LOS<br>SOBRES</div>
+                <img src="img/sobre_cerrado.jpg" alt="Abrir Sobres">
+                <div class="contador-sobres" id="sobresDisponibles">2 hoy</div>
+            </a>
+
+            <a href="codigo.html" class="elemento">
+                <div class="letrero">CÓDIGO<br>PROMOCIONAL</div>
+                <img src="img/caja_barajitas.jpg" alt="Código">
+            </a>
+
         </div>
 
-        <a href="mi-album.html" class="boton-central">
-            <img src="img/portada.jpg" alt="Portada del álbum">
-            <div class="texto">MI ÁLBUM</div>
-            <div class="subtexto">Toca para abrir el álbum</div>
-        </a>
-
-        <a href="abrir-sobres.html" class="caja-sobres">
-            <img src="img/caja_barajitas.jpg" alt="Caja de sobres">
-            <div class="texto">ABRIR LOS SOBRES</div>
-            <div class="contador" id="sobresDisponibles">2 sobres disponibles hoy</div>
-        </a>
-
-        <div class="fila-inferior">
-            <a href="retos.html" class="opcion-inferior"><div class="icono">🏅</div><div class="texto">RETOS</div></a>
-            <a href="intercambio.html" class="opcion-inferior"><div class="icono">🤝</div><div class="texto">INTERCAMBIO</div></a>
-            <a href="equipo.html" class="opcion-inferior"><div class="icono">⚽</div><div class="texto">MI EQUIPO</div></a>
-            <a href="mas.html" class="opcion-inferior"><div class="icono">⚙️</div><div class="texto">MÁS...</div></a>
-        </div>
-
-        <div style="height: 64px;"></div>
+        <div class="espacio-barra"></div>
     </div>
 
+    <!-- Barra inferior fija -->
     <div class="barra-inferior">
         <a href="retos.html" class="barra-item"><span class="icono">🏅</span>Retos</a>
         <a href="intercambio.html" class="barra-item"><span class="icono">🤝</span>Intercambio</a>
@@ -56,7 +53,6 @@
         <a href="mas.html" class="barra-item"><span class="icono">⚙️</span>Más</a>
     </div>
 
-    <!-- Aquí llamamos al archivo de JavaScript, al final para que cargue rápido -->
     <script src="script.js"></script>
 
 </body>
