@@ -3,64 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mi Álbum - Libro Abierto</title>
-    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
-    <link rel="stylesheet" href="mi-album.css">
+    <title>Mi Álbum Virtual 2026</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <a href="index.html" class="btn-volver">← Volver</a>
-    <div class="titulo-album">📖 MI ÁLBUM ABIERTO 📖</div>
+    <div class="contenedor">
+        <div class="titulo-principal">🏆 MI ÁLBUM VIRTUAL 2026 🏆</div>
 
-    <div id="book-container">
-        <div id="book">
-            <div class="page page-cover">
-                <div style="font-size:50px">🏆</div>
-                <div style="margin-top:10px">FIFA 2026</div>
-                <div style="font-size:12px; margin-top:8px; opacity:0.9">Toca las esquinas para pasar página</div>
-            </div>
-            <div class="page">
-                <h3>Página 1 - Jugadores</h3>
-                <div class="grid" id="grid1"></div>
-            </div>
-            <div class="page">
-                <h3>Página 2 - Jugadores</h3>
-                <div class="grid" id="grid2"></div>
-            </div>
-            <div class="page">
-                <h3>Página 3 - Equipos</h3>
-                <div class="grid" id="grid3"></div>
-            </div>
-            <div class="page">
-                <h3>Página 4 - Equipos</h3>
-                <div class="grid" id="grid4"></div>
-            </div>
-            <div class="page page-cover">
-                <div style="font-size:40px">⭐</div>
-                <div style="margin-top:10px">FIN</div>
-                <div style="font-size:11px; margin-top:8px; opacity:0.9">Contraportada</div>
-            </div>
+        <!-- Fila de los 5 elementos principales -->
+        <div class="fila-principal">
+            
+            <a href="escanear.html" class="elemento">
+                <div class="letrero">ESCANEAR<br>CONTENIDO</div>
+                <img src="img/escanea_qr.jpg" alt="Escanear">
+            </a>
+
+            <a href="mis-cromos.html" class="elemento">
+                <div class="letrero">MIS<br>CROMOS</div>
+                <img src="img/barajitas/1.jpg" alt="Mis Cromos">
+            </a>
+
+            <a href="mi-album.html" class="elemento central">
+                <div class="letrero">MI ÁLBUM</div>
+                <img src="img/portada.jpg" alt="Mi Álbum">
+            </a>
+
+            <a href="abrir-sobres.html" class="elemento">
+                <div class="letrero">ABRIR LOS<br>SOBRES</div>
+                <img src="img/sobre_cerrado.jpg" alt="Abrir Sobres">
+                <div class="contador-sobres" id="sobresDisponibles">2 hoy</div>
+            </a>
+
+            <a href="codigo.html" class="elemento">
+                <div class="letrero">CÓDIGO<br>PROMOCIONAL</div>
+                <img src="img/caja_barajitas.jpg" alt="Código">
+            </a>
+
         </div>
+
+        <div class="espacio-barra"></div>
     </div>
 
-    <button id="btnSobre">📦 Abrir Sobre</button>
-
-    <div id="sobreScreen">
-        <div class="sobre-titulo">SOBRE DE DELUXE PACK</div>
-        <div class="sobre-sub">Toca el sobre para abrirlo</div>
-        <div class="envelope" id="envelope">
-            <div class="env-body">
-                <div class="copa">🏆</div>
-                <div class="txt">FIFA 2026</div>
-                <div class="panini">PANINI</div>
-            </div>
-            <div class="env-flap"></div>
-        </div>
-        <div id="bandeja"></div>
-        <button id="btnCerrar">Pegar en mi álbum</button>
+    <!-- Barra inferior fija -->
+    <div class="barra-inferior">
+        <a href="retos.html" class="barra-item"><span class="icono">🏅</span>Retos</a>
+        <a href="intercambio.html" class="barra-item"><span class="icono">🤝</span>Intercambio</a>
+        <a href="equipo.html" class="barra-item"><span class="icono">⚽</span>Mi Equipo</a>
+        <a href="mas.html" class="barra-item"><span class="icono">⚙️</span>Más</a>
     </div>
 
-    <script src="mi-album.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
